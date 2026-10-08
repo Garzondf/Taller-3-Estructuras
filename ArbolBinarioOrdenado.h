@@ -1,20 +1,21 @@
 #ifndef ARBOL_BINARIO_ORDENADO_H
 #define ARBOL_BINARIO_ORDENADO_H
 
-#include "NodoBinarioOrdenado.h"
+#include "NodoBinario.h"
 #include <list>
 #include <string>
 
 class ArbolBinarioOrdenado {
 private:
-    NodoBinarioOrdenado* raiz;
+    NodoBinario* raiz;
 
 public:
-    ArbolBinarioOrdenado(); // CreateArbolBinarioOrdenado
-    bool esVacio() ;
-    void insertar(std::string codigo);
-    void eliminar(std::string codigo);
-    void inorden(std::list<std::string>& lista) ;
+    ArbolBinarioOrdenado();
+    ~ArbolBinarioOrdenado();
+    bool esVacio();
+    bool insertar(std::string codigo);
+    bool eliminar(std::string codigo);
+    void inOrden(std::list<std::string>& lista);
 };
 
 #include "ArbolBinarioOrdenado.hxx"

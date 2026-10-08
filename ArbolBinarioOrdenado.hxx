@@ -7,54 +7,132 @@ ArbolBinarioOrdenado::ArbolBinarioOrdenado() {
     raiz = nullptr;
 }
 
-bool ArbolBinarioOrdenado::esVacio()  {
+ArbolBinarioOrdenado::~ArbolBinarioOrdenado() {
+    if (raiz != nullptr) {
+        std::list<NodoBinario*> cola;
+        cola.push_back(raiz);
+        
+        while (!cola.empty()) {
+            NodoBinario* actual = cola.front();
+            cola.pop_front();
+            
+            if (actual->obtenerHijoIzq() != nullptr) {
+                cola.push_back(actual->obtenerHijoIzq());
+            }
+            if (actual->obtenerHijoDer() != nullptr) {
+                cola.push_back(actual->obtenerHijoDer());
+            }
+            delete actual;
+        }
+    }
+    raiz = nullptr;
+}
+
+bool ArbolBinarioOrdenado::esVacio() {
     return raiz == nullptr;
 }
 
-void ArbolBinarioOrdenado::insertar(std::string codigo) {
+bool ArbolBinarioOrdenado::insertar(std::string val) {
     if (raiz == nullptr) {
-        raiz = new NodoBinarioOrdenado(codigo);
-        return;
+        raiz = new NodoBinario(val);
+        return true;
     }
     
-    NodoBinarioOrdenado* actual = raiz;
+    NodoBinario* actual = raiz;
     while (true) {
-        if (codigo < actual->obtenerDato()) {
-            if (actual->obtenerIzquierdo() == nullptr) {
-                actual->fijarIzquierdo(new NodoBinarioOrdenado(codigo));
-                break;
+        if (val == actual->obtenerDato()) {
+            return false;
+        } else if (val < actual->obtenerDato()) {
+            if (actual->obtenerHijoIzq() == nullptr) {
+                actual->fijarHijoIzq(new NodoBinario(val));
+                return true;
             }
-            actual = actual->obtenerIzquierdo();
-        } else if (codigo > actual->obtenerDato()) {
-            if (actual->obtenerDerecho() == nullptr) {
-                actual->fijarDerecho(new NodoBinarioOrdenado(codigo));
-                break;
-            }
-            actual = actual->obtenerDerecho();
+            actual = actual->obtenerHijoIzq();
         } else {
-            break; // Si ya existe no hace nada
+            if (actual->obtenerHijoDer() == nullptr) {
+                actual->fijarHijoDer(new NodoBinario(val));
+                return true;
+            }
+            actual = actual->obtenerHijoDer();
         }
     }
 }
 
-void ArbolBinarioOrdenado::eliminar(std::string codigo) {
-    NodoBinarioOrdenado* actual = raiz;
-    NodoBinarioOrdenado* padre = nullptr;
+bool ArbolBinarioOrdenado::eliminar(std::string val) {
+    NodoBinario* actual = raiz;
+    NodoBinario* padre = nullptr;
 
-    while (actual != nullptr && actual->obtenerDato() != codigo) {
+    while (actual != nullptr && actual->obtenerDato() != val) {
         padre = actual;
-        if (codigo < actual->obtenerDato()) {
-            actual = actual->obtenerIzquierdo();
+        if (val < actual->obtenerDato()) {
+            actual = actual->obtenerHijoIzq();
         } else {
-            actual = actual->obtenerDerecho();
+            actual = actual->obtenerHijoDer();
         }
     }
 
- //falta
+    if (actual == nullptr) return false; 
+
+    // 0 o 1 hijo
+    if (actual->obtenerHijoIzq() == nullptr || actual->obtenerHijoDer() == nullptr) {
+        
+        NodoBinario* hijo;
+        if (actual->obtenerHijoIzq() != nullptr) {
+            hijo = actual->obtenerHijoIzq();
+        } else {
+            hijo = actual->obtenerHijoDer();
+        }
+        
+        if (padre == nullptr) {
+            raiz = hijo;
+        } else if (actual == padre->obtenerHijoIzq()) {
+            padre->fijarHijoIzq(hijo);
+        } else {
+            padre->fijarHijoDer(hijo);
+        }
+        delete actual;
+    } 
+    // 2 hijos
+    else {
+        NodoBinario* sucesor = actual->obtenerHijoDer();
+        NodoBinario* padreSucesor = actual;
+        
+        while (sucesor->obtenerHijoIzq() != nullptr) {
+            padreSucesor = sucesor;
+            sucesor = sucesor->obtenerHijoIzq();
+        }
+        
+        actual->fijarDato(sucesor->obtenerDato());
+        
+        if (padreSucesor == actual) {
+            padreSucesor->fijarHijoDer(sucesor->obtenerHijoDer());
+        } else {
+            padreSucesor->fijarHijoIzq(sucesor->obtenerHijoDer());
+        }
+        delete sucesor;
+    }
+    
+    return true;
 }
 
-void ArbolBinarioOrdenado::inorden(std::list<std::string>& lista)  {
-  //falta
+void ArbolBinarioOrdenado::inOrden(std::list<std::string>& lista) {
+    lista.clear();
+    std::list<NodoBinario*> nodos_pendientes;
+    NodoBinario* actual = raiz;
+
+    while (actual != nullptr || !nodos_pendientes.empty()) {
+        while (actual != nullptr) {
+            nodos_pendientes.push_back(actual);
+            actual = actual->obtenerHijoIzq();
+        }
+        
+        actual = nodos_pendientes.back();
+        nodos_pendientes.pop_back();
+        
+        lista.push_back(actual->obtenerDato());
+        
+        actual = actual->obtenerHijoDer();
+    }
 }
 
 #endif

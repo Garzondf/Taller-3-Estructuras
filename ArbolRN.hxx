@@ -3,23 +3,26 @@
 
 #include "ArbolRN.h"
 
-bool ArbolRN::esVacio()  {
-    return contenedor.empty();
+ArbolRN::~ArbolRN() {
+    RN.clear();
 }
 
-void ArbolRN::insertar(std::string codigo) {
-    contenedor.insert(codigo);
+bool ArbolRN::esVacio() {
+    return RN.empty();
 }
 
-void ArbolRN::eliminar(std::string codigo) {
-    contenedor.erase(codigo);
+void ArbolRN::insertar(std::string val) {
+    RN.insert(val);
 }
 
-void ArbolRN::inorden(std::list<std::string>& lista)  {
-    std::set<std::string>::iterator it = contenedor.begin();
-    while (it != contenedor.end()) {
-        lista.push_back(*it);
-        ++it;
+void ArbolRN::eliminar(std::string val) {
+    RN.erase(val);
+}
+
+
+void ArbolRN::inOrden(std::list<std::string>& lista) {
+    for (std::string valor : RN) {
+        lista.push_back(valor);
     }
 }
 

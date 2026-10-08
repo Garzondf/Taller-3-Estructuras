@@ -1,76 +1,121 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <list>
 #include <ctime>
+#include <list>
+#include <string>
 #include "ArbolBinarioOrdenado.h"
 #include "ArbolAVL.h"
 #include "ArbolRN.h"
-
+#include <iomanip>//para ver bien la tabla de comparacion
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    
     string nombre_archivo = argv[1];
 
-    ArbolBinarioOrdenado arbol_binario;
-    ArbolAVL arbol_avl;
-    ArbolRN arbol_rn;
+    ArbolBinarioOrdenado arbolBinario;
+    clock_t t_inicio_bin = clock();
+
+    ifstream archivoBin(nombre_archivo);
+    if (!archivoBin.is_open()) {
+        cout << "No se pudo abrir el archivo.\n";
+        return 1;
+    }
 
     char operacion;
     string codigo;
-
-    list<string> lista_binario;
-    list<string> lista_avl;
-    list<string> lista_rn;
-
-    // Procesar y medir el Arbol Binario Ordenado
-    clock_t inicio_bin = clock();
-    ifstream archivo_bin(nombre_archivo);
-    while (archivo_bin >> operacion >> codigo) {
-        if (operacion == 'A' || operacion == 'a') arbol_binario.insertar(codigo);
-        else if (operacion == 'E' || operacion == 'e') arbol_binario.eliminar(codigo);
+    while (archivoBin >> operacion >> codigo) {
+        if (operacion == 'A') {
+            arbolBinario.insertar(codigo);
+        } else if (operacion == 'E') {
+            arbolBinario.eliminar(codigo);
+        }
     }
-    archivo_bin.close();
-    arbol_binario.inorden(lista_binario);
-    clock_t fin_bin = clock();
-    double tiempo_bin = double(fin_bin - inicio_bin) / CLOCKS_PER_SEC;
+    archivoBin.close();
 
-    // Procesar y medir el Arbol AVL
-    clock_t inicio_avl = clock();
-    ifstream archivo_avl(nombre_archivo);
-    while (archivo_avl >> operacion >> codigo) {
-        if (operacion == 'A' || operacion == 'a') arbol_avl.insertar(codigo);
-        else if (operacion == 'E' || operacion == 'e') arbol_avl.eliminar(codigo);
+    list<string> listaBinario;
+    arbolBinario.inOrden(listaBinario);
+    clock_t t_fin_bin = clock();
+    double tiempo_bin = (t_fin_bin - t_inicio_bin) / double(CLOCKS_PER_SEC);
+
+
+    ArbolAVL arbolAVL;
+    clock_t t_inicio_avl = clock();
+
+    ifstream archivoAvl(nombre_archivo);
+    while (archivoAvl >> operacion >> codigo) {
+        if (operacion == 'A') {
+            arbolAVL.insertar(codigo);
+        } else if (operacion == 'E') {
+            arbolAVL.eliminar(codigo);
+        }
     }
-    archivo_avl.close();
-    arbol_avl.inorden(lista_avl);
-    clock_t fin_avl = clock();
-    double tiempo_avl = double(fin_avl - inicio_avl) / CLOCKS_PER_SEC;
+    archivoAvl.close();
 
-    // Procesar y medir el Arbol RN
-    clock_t inicio_rn = clock();
-    ifstream archivo_rn(nombre_archivo);
-    while (archivo_rn >> operacion >> codigo) {
-        if (operacion == 'A' || operacion == 'a') arbol_rn.insertar(codigo);
-        else if (operacion == 'E' || operacion == 'e') arbol_rn.eliminar(codigo);
+    list<string> listaAVL;
+    arbolAVL.inOrden(listaAVL);
+    clock_t t_fin_avl = clock();
+    double tiempo_avl = (t_fin_avl - t_inicio_avl) / double(CLOCKS_PER_SEC);
+
+
+    ArbolRN arbolRN;
+    clock_t t_inicio_rn = clock();
+
+    ifstream archivoRn(nombre_archivo);
+    while (archivoRn >> operacion >> codigo) {
+        if (operacion == 'A') {
+            arbolRN.insertar(codigo);
+        } else if (operacion == 'E') {
+            arbolRN.eliminar(codigo);
+        }
     }
-    archivo_rn.close();
-    arbol_rn.inorden(lista_rn);
-    clock_t fin_rn = clock();
-    double tiempo_rn = double(fin_rn - inicio_rn) / CLOCKS_PER_SEC;
+    archivoRn.close();
 
-    // Mostrar los tiempos en pantalla
-    cout << "\n=== TIEMPOS DE EJECUCION (Llenado + Recorrido) ===\n";
-    cout << "Arbol Binario Ordenado: " << tiempo_bin << " segundos.\n";
-    cout << "Arbol AVL:              " << tiempo_avl << " segundos.\n";
-    cout << "Arbol Rojinegro (RN):   " << tiempo_rn << " segundos.\n";
+    list<string> listaRN;
+    arbolRN.inOrden(listaRN);
+    clock_t t_fin_rn = clock();
+    double tiempo_rn = (t_fin_rn - t_inicio_rn) / double(CLOCKS_PER_SEC);
+//impresion por linea de comandos hecha con IA
+    cout << "Tiempos de ejecucion:\n";
+    cout << "Arbol Binario: " << tiempo_bin << " s\n";
+    cout << "Arbol AVL: " << tiempo_avl << " s\n";
+    cout << "Arbol RN: " << tiempo_rn << " s\n\n";
 
-    // Comparar recorridos al final
-    if (lista_binario == lista_avl && lista_avl == lista_rn) {
-        cout << "\n[Validacion Exitosa]: Todos los arboles generaron la misma lista ordenada.\n";
-    } else {
-        cout << "\n[Advertencia]: Los datos no estan bien entre arboes.\n";
+    cout << left << setw(15) << "Binario" << setw(15) << "AVL" << setw(15) << "RN" << "\n";
+    cout << "---------------------------------------------\n";
+
+    std::list<string>::iterator itBin = listaBinario.begin();
+    std::list<string>::iterator itAvl = listaAVL.begin();
+    std::list<string>::iterator itRn = listaRN.begin();
+
+    while (itBin != listaBinario.end() || itAvl != listaAVL.end() || itRn != listaRN.end()) {
+        if (itBin != listaBinario.end()) {
+            cout << left << setw(15) << *itBin;
+            ++itBin;
+        } else {
+            cout << left << setw(15) << "-";
+        }
+
+        if (itAvl != listaAVL.end()) {
+            cout << left << setw(15) << *itAvl;
+            ++itAvl;
+        } else {
+            cout << left << setw(15) << "-";
+        }
+
+        if (itRn != listaRN.end()) {
+            cout << left << setw(15) << *itRn;
+            ++itRn;
+        } else {
+            cout << left << setw(15) << "-";
+        }
+
+        cout << "\n";
     }
 
-    return 0;
+    cout << "Tiempos de ejecucion:\n";
+    cout << "Arbol Binario: " << tiempo_bin << " s\n";
+    cout << "Arbol AVL: " << tiempo_avl << " s\n";
+    cout << "Arbol RN: " << tiempo_rn << " s\n\n";
+
 }

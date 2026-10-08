@@ -6,14 +6,15 @@
 #include <string>
 
 class ArbolRN {
-private:
-    std::set<std::string> contenedor;
-
-public:
-    bool esVacio() ;
-    void insertar(std::string codigo);
-    void eliminar(std::string codigo);
-    void inorden(std::list<std::string>& lista) ;
+  protected:
+    std::set<std::string> RN;
+    
+  public:
+    ~ArbolRN();
+    bool esVacio();
+    void insertar(std::string val);
+    void eliminar(std::string val);
+    void inOrden(std::list<std::string>& lista);
 };
 
 #include "ArbolRN.hxx"
