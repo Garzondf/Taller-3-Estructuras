@@ -13,8 +13,6 @@ int main(int argc, char* argv[]) {
     
     string nombre_archivo = argv[1];
 
-    ArbolBinarioOrdenado arbolBinario;
-    clock_t t_inicio_bin = clock();
 
     ifstream archivoBin(nombre_archivo);
     if (!archivoBin.is_open()) {
@@ -24,6 +22,9 @@ int main(int argc, char* argv[]) {
 
     char operacion;
     string codigo;
+    
+    ArbolBinarioOrdenado arbolBinario;
+    clock_t t_inicio_bin = clock();
     while (archivoBin >> operacion >> codigo) {
         if (operacion == 'A') {
             arbolBinario.insertar(codigo);
@@ -76,11 +77,7 @@ int main(int argc, char* argv[]) {
     clock_t t_fin_rn = clock();
     double tiempo_rn = (t_fin_rn - t_inicio_rn) / double(CLOCKS_PER_SEC);
 //impresion por linea de comandos hecha con IA
-    cout << "Tiempos de ejecucion:\n";
-    cout << "Arbol Binario: " << tiempo_bin << " s\n";
-    cout << "Arbol AVL: " << tiempo_avl << " s\n";
-    cout << "Arbol RN: " << tiempo_rn << " s\n\n";
-
+  
     cout << left << setw(15) << "Binario" << setw(15) << "AVL" << setw(15) << "RN" << "\n";
     cout << "---------------------------------------------\n";
 

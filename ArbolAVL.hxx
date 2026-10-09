@@ -39,21 +39,21 @@ NodoAVL* ArbolAVL::rotacionDerecha(NodoAVL* y) {
     x->fijarHijoDer(y);
     y->fijarHijoIzq(T2);
 
-    int altIzqY = 0;
-    if (y->obtenerHijoIzq() != nullptr) { altIzqY = y->obtenerHijoIzq()->obtenerAltura(); }
-    int altDerY = 0;
-    if (y->obtenerHijoDer() != nullptr) { altDerY = y->obtenerHijoDer()->obtenerAltura(); }
+    int AIzqY = 0;
+    if (y->obtenerHijoIzq() != nullptr) { AIzqY = y->obtenerHijoIzq()->obtenerAltura(); }
+    int ADerY = 0;
+    if (y->obtenerHijoDer() != nullptr) { ADerY = y->obtenerHijoDer()->obtenerAltura(); }
     
-    if (altIzqY > altDerY) { y->fijarAltura(1 + altIzqY); } 
-    else { y->fijarAltura(1 + altDerY); }
+    if (AIzqY > ADerY) { y->fijarAltura(1 + AIzqY); } 
+    else { y->fijarAltura(1 + ADerY); }
 
-    int altIzqX = 0;
-    if (x->obtenerHijoIzq() != nullptr) { altIzqX = x->obtenerHijoIzq()->obtenerAltura(); }
-    int altDerX = 0;
-    if (x->obtenerHijoDer() != nullptr) { altDerX = x->obtenerHijoDer()->obtenerAltura(); }
+    int AIzqX = 0;
+    if (x->obtenerHijoIzq() != nullptr) { AIzqX = x->obtenerHijoIzq()->obtenerAltura(); }
+    int ADerX = 0;
+    if (x->obtenerHijoDer() != nullptr) { ADerX = x->obtenerHijoDer()->obtenerAltura(); }
 
-    if (altIzqX > altDerX) { x->fijarAltura(1 + altIzqX); } 
-    else { x->fijarAltura(1 + altDerX); }
+    if (AIzqX > ADerX) { x->fijarAltura(1 + AIzqX); } 
+    else { x->fijarAltura(1 + ADerX); }
 
     return x;
 }
@@ -65,21 +65,21 @@ NodoAVL* ArbolAVL::rotacionIzquierda(NodoAVL* x) {
     y->fijarHijoIzq(x);
     x->fijarHijoDer(T2);
 
-    int altIzqX = 0;
-    if (x->obtenerHijoIzq() != nullptr) { altIzqX = x->obtenerHijoIzq()->obtenerAltura(); }
-    int altDerX = 0;
-    if (x->obtenerHijoDer() != nullptr) { altDerX = x->obtenerHijoDer()->obtenerAltura(); }
+    int AIzqX = 0;
+    if (x->obtenerHijoIzq() != nullptr) { AIzqX = x->obtenerHijoIzq()->obtenerAltura(); }
+    int ADerX = 0;
+    if (x->obtenerHijoDer() != nullptr) { ADerX = x->obtenerHijoDer()->obtenerAltura(); }
     
-    if (altIzqX > altDerX) { x->fijarAltura(1 + altIzqX); } 
-    else { x->fijarAltura(1 + altDerX); }
+    if (AIzqX > ADerX) { x->fijarAltura(1 + AIzqX); } 
+    else { x->fijarAltura(1 + ADerX); }
 
-    int altIzqY = 0;
-    if (y->obtenerHijoIzq() != nullptr) { altIzqY = y->obtenerHijoIzq()->obtenerAltura(); }
-    int altDerY = 0;
-    if (y->obtenerHijoDer() != nullptr) { altDerY = y->obtenerHijoDer()->obtenerAltura(); }
+    int AIzqY = 0;
+    if (y->obtenerHijoIzq() != nullptr) { AIzqY = y->obtenerHijoIzq()->obtenerAltura(); }
+    int ADerY = 0;
+    if (y->obtenerHijoDer() != nullptr) { ADerY = y->obtenerHijoDer()->obtenerAltura(); }
 
-    if (altIzqY > altDerY) { y->fijarAltura(1 + altIzqY); } 
-    else { y->fijarAltura(1 + altDerY); }
+    if (AIzqY > ADerY) { y->fijarAltura(1 + AIzqY); } 
+    else { y->fijarAltura(1 + ADerY); }
 
     return y;
 }
@@ -87,49 +87,49 @@ NodoAVL* ArbolAVL::rotacionIzquierda(NodoAVL* x) {
 NodoAVL* ArbolAVL::balanceo(NodoAVL* nodo) {
     if (nodo == nullptr) { return nullptr; }
 
-    int altIzq = 0;
-    if (nodo->obtenerHijoIzq() != nullptr) { altIzq = nodo->obtenerHijoIzq()->obtenerAltura(); }
-    int altDer = 0;
-    if (nodo->obtenerHijoDer() != nullptr) { altDer = nodo->obtenerHijoDer()->obtenerAltura(); }
+    int AIzq = 0;
+    if (nodo->obtenerHijoIzq() != nullptr) { AIzq = nodo->obtenerHijoIzq()->obtenerAltura(); }
+    int ADer = 0;
+    if (nodo->obtenerHijoDer() != nullptr) { ADer = nodo->obtenerHijoDer()->obtenerAltura(); }
 
-    if (altIzq > altDer) { nodo->fijarAltura(1 + altIzq); } 
-    else { nodo->fijarAltura(1 + altDer); }
+    if (AIzq > ADer) { nodo->fijarAltura(1 + AIzq); } 
+    else { nodo->fijarAltura(1 + ADer); }
 
-    int balance = altIzq - altDer;
+    int balance = AIzq - ADer;
 
-    // Desbalance izquierda
+    //izquierda
     if (balance > 1) {
-        int altIzqHijo = 0;
-        int altDerHijo = 0;
+        int AIzqHijo = 0;
+        int ADerHijo = 0;
         if (nodo->obtenerHijoIzq() != nullptr) {
             if (nodo->obtenerHijoIzq()->obtenerHijoIzq() != nullptr) {
-                altIzqHijo = nodo->obtenerHijoIzq()->obtenerHijoIzq()->obtenerAltura();
+                AIzqHijo = nodo->obtenerHijoIzq()->obtenerHijoIzq()->obtenerAltura();
             }
             if (nodo->obtenerHijoIzq()->obtenerHijoDer() != nullptr) {
-                altDerHijo = nodo->obtenerHijoIzq()->obtenerHijoDer()->obtenerAltura();
+                ADerHijo = nodo->obtenerHijoIzq()->obtenerHijoDer()->obtenerAltura();
             }
         }
         
-        if (altIzqHijo - altDerHijo < 0) {
+        if (AIzqHijo - ADerHijo < 0) {
             nodo->fijarHijoIzq(rotacionIzquierda(nodo->obtenerHijoIzq()));
         }
         return rotacionDerecha(nodo);
     }
 
-    // Desbalance derecha
+    //derecha
     if (balance < -1) {
-        int altIzqHijo = 0;
-        int altDerHijo = 0;
+        int AIzqHijo = 0;
+        int ADerHijo = 0;
         if (nodo->obtenerHijoDer() != nullptr) {
             if (nodo->obtenerHijoDer()->obtenerHijoIzq() != nullptr) {
-                altIzqHijo = nodo->obtenerHijoDer()->obtenerHijoIzq()->obtenerAltura();
+                AIzqHijo = nodo->obtenerHijoDer()->obtenerHijoIzq()->obtenerAltura();
             }
             if (nodo->obtenerHijoDer()->obtenerHijoDer() != nullptr) {
-                altDerHijo = nodo->obtenerHijoDer()->obtenerHijoDer()->obtenerAltura();
+                ADerHijo = nodo->obtenerHijoDer()->obtenerHijoDer()->obtenerAltura();
             }
         }
         
-        if (altIzqHijo - altDerHijo > 0) {
+        if (AIzqHijo - ADerHijo > 0) {
             nodo->fijarHijoDer(rotacionDerecha(nodo->obtenerHijoDer()));
         }
         return rotacionIzquierda(nodo);
